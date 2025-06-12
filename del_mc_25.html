@@ -7539,7 +7539,52 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Setup-und-Imports">Setup und Imports<a class="anchor-link" href="#Setup-und-Imports">¶</a></h2><p>Bevor mit der Datenverarbeitung und Modellierung begonnen wird, werden in diesem Abschnitt alle notwendigen Bibliotheken und Module geladen. Dazu gehören Standardbibliotheken für numerische Berechnungen und Visualisierungen sowie spezialisierte Pakete für Deep Learning mit PyTorch, Datenvorverarbeitung und Modell-Tracking mit Weights &amp; Biases.</p>
+<h2 id="Inhaltsverzeichnis-"><strong>Inhaltsverzeichnis</strong> <a id="toc0_"></a><a class="anchor-link" href="#Inhaltsverzeichnis-">¶</a></h2><ul>
+<li><a href="#toc1_">Setup und Imports</a></li>
+<li><a href="#toc2_">Schritt 1: Auswahl des Tasks und des Datensatzes</a></li>
+<li><a href="#toc3_">Schritt 2: Daten kennenlernen und Preprocessing</a><ul>
+<li><a href="#toc3a_">Klassenverteilung</a></li>
+<li><a href="#toc3b_">Visuelle Inspektion der Daten</a></li>
+<li><a href="#toc3c_">Analyse der Pixelwertverteilungen</a></li>
+<li><a href="#toc3d_">Preprocessing-Schritte</a></li>
+<li><a href="#toc3e_">Aufteilung in Trainings-, Validierungs- und Testdaten</a></li>
+</ul>
+</li>
+<li><a href="#toc4_">Schritt 3: Aufbau des Basismodells und Trainingsfunktionalität</a><ul>
+<li><a href="#toc4a_">Architektur des Basismodells</a></li>
+<li><a href="#toc4b_">Trainings- und Evaluationsfunktionen</a></li>
+<li><a href="#toc4c_">Sanity Check: Overfitting auf ein Sample</a></li>
+<li><a href="#toc4d_">5-Fold Cross-Validation</a></li>
+</ul>
+</li>
+<li><a href="#toc5_">Schritt 4: Hyperparameter Tuning</a><ul>
+<li><a href="#toc5a_">Hypothese 1 – Reduzierte Lernrate</a></li>
+<li><a href="#toc5b_">Hypothese 2 – Xavier-Initialisierung</a></li>
+<li><a href="#toc5c_">Hypothese 3 – Erhöhte Modellkomplexität</a></li>
+<li><a href="#toc5d_">Hypothese 4 – Mehr Filter</a></li>
+<li><a href="#toc5e_">Hypothese 5 – Grössere Kernel (5×5)</a></li>
+<li><a href="#toc5f_">Hypothese 6 – Kein Pooling</a></li>
+<li><a href="#toc5g_">Hypothese 7 – Dropout</a></li>
+<li><a href="#toc5h_">Hypothese 8 – Data Augmentation</a></li>
+<li><a href="#toc5i_">Hypothese 9 – Batch Normalization</a></li>
+<li><a href="#toc5j_">Hypothese 10 – Adam-Optimizer</a></li>
+<li><a href="#toc5k_">Bestes Modell – Kombination erfolgreicher Ansätze</a></li>
+</ul>
+</li>
+<li><a href="#toc6_">Schritt 5: Transfer Learning mit ResNet18</a></li>
+<li><a href="#toc7_">Erkenntnisse und Reflexion</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Setup-und-Imports"><a id="toc1_"></a>Setup und Imports<a class="anchor-link" href="#Setup-und-Imports">¶</a></h2><p>Bevor mit der Datenverarbeitung und Modellierung begonnen wird, werden in diesem Abschnitt alle notwendigen Bibliotheken und Module geladen. Dazu gehören Standardbibliotheken für numerische Berechnungen und Visualisierungen sowie spezialisierte Pakete für Deep Learning mit PyTorch, Datenvorverarbeitung und Modell-Tracking mit Weights &amp; Biases.</p>
 </div>
 </div>
 </div>
@@ -7548,7 +7593,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
@@ -7585,7 +7630,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Schritt-1:-Auswahl-des-Tasks-und-des-Datensatzes">Schritt 1: Auswahl des Tasks und des Datensatzes<a class="anchor-link" href="#Schritt-1:-Auswahl-des-Tasks-und-des-Datensatzes">¶</a></h2><p>Für diese Mini-Challenge habe ich mich für einen klassischen <strong>Image Classification Task</strong> entschieden. Ziel ist es, ein Modell zu trainieren, das Bilder korrekt einer von zehn Klassen zuordnet.</p>
+<h2 id="Schritt-1:-Auswahl-des-Tasks-und-des-Datensatzes"><a id="toc2_"></a>Schritt 1: Auswahl des Tasks und des Datensatzes<a class="anchor-link" href="#Schritt-1:-Auswahl-des-Tasks-und-des-Datensatzes">¶</a></h2><p>Für diese Mini-Challenge habe ich mich für einen klassischen <strong>Image Classification Task</strong> entschieden. Ziel ist es, ein Modell zu trainieren, das Bilder korrekt einer von zehn Klassen zuordnet.</p>
 <p>Als Datensatz verwende ich <strong>CIFAR-10</strong>, einen etablierten und überschaubaren Datensatz für Bildklassifikation. Der Datensatz enthält <strong>60.000 Farbbilder</strong> in der Grösse 32x32 Pixel, aufgeteilt in zehn Klassen wie Frosch, Hund, Auto oder Flugzeug. Die Daten sind bereits in <strong>Trainings- und Testdaten</strong> aufgeteilt (50.000 / 10.000) und eignen sich besonders gut für schnelle Experimente und den Vergleich verschiedener Modell- und Trainingseinstellungen.</p>
 <p>Die Wahl fiel auf CIFAR-10, weil:</p>
 <ul>
@@ -7605,7 +7650,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Schritt-2:-Daten-kennenlernen-und-Preprocessing">Schritt 2: Daten kennenlernen und Preprocessing<a class="anchor-link" href="#Schritt-2:-Daten-kennenlernen-und-Preprocessing">¶</a></h2><p>Um ein besseres Verständnis für die Daten zu bekommen, wurde im zweiten Schritt eine explorative Analyse des CIFAR-10 Trainingsdatensatzes durchgeführt. Der Fokus lag dabei auf der Klassenverteilung, der visuellen Kontrolle der Bilder, der statistischen Verteilung der Pixelwerte pro Farbkanal sowie dem anschliessenden Preprocessing für das Modelltraining.</p>
+<h2 id="Schritt-2:-Daten-kennenlernen-und-Preprocessing"><a id="toc3_"></a>Schritt 2: Daten kennenlernen und Preprocessing<a class="anchor-link" href="#Schritt-2:-Daten-kennenlernen-und-Preprocessing">¶</a></h2><p>Um ein besseres Verständnis für die Daten zu bekommen, wurde im zweiten Schritt eine explorative Analyse des CIFAR-10 Trainingsdatensatzes durchgeführt. Der Fokus lag dabei auf der Klassenverteilung, der visuellen Kontrolle der Bilder, der statistischen Verteilung der Pixelwerte pro Farbkanal sowie dem anschliessenden Preprocessing für das Modelltraining.</p>
 </div>
 </div>
 </div>
@@ -7614,7 +7659,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">transform_eda</span> <span class="o">=</span> <span class="n">ToTensor</span><span class="p">()</span>
@@ -7649,7 +7694,7 @@ Klassen: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Klassenverteilung">Klassenverteilung<a class="anchor-link" href="#Klassenverteilung">¶</a></h3>
+<h3 id="Klassenverteilung"><a id="toc3a_"></a>Klassenverteilung<a class="anchor-link" href="#Klassenverteilung">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7670,7 +7715,7 @@ Klassen: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">class_counts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cifar10_train</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
@@ -7728,7 +7773,7 @@ truck     : 5000
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Visuelle-Inspektion-der-Daten">Visuelle Inspektion der Daten<a class="anchor-link" href="#Visuelle-Inspektion-der-Daten">¶</a></h3>
+<h3 id="Visuelle-Inspektion-der-Daten"><a id="toc3b_"></a>Visuelle Inspektion der Daten<a class="anchor-link" href="#Visuelle-Inspektion-der-Daten">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7748,7 +7793,7 @@ truck     : 5000
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -7767,7 +7812,7 @@ truck     : 5000
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">grid_imgs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -7823,7 +7868,7 @@ truck     : 5000
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Analyse-der-Pixelwertverteilungen">Analyse der Pixelwertverteilungen<a class="anchor-link" href="#Analyse-der-Pixelwertverteilungen">¶</a></h3>
+<h3 id="Analyse-der-Pixelwertverteilungen"><a id="toc3c_"></a>Analyse der Pixelwertverteilungen<a class="anchor-link" href="#Analyse-der-Pixelwertverteilungen">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7844,7 +7889,7 @@ truck     : 5000
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Kanalweise Pixelwerte sammeln</span>
@@ -7893,7 +7938,7 @@ truck     : 5000
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Preprocessing-Schritte">Preprocessing-Schritte<a class="anchor-link" href="#Preprocessing-Schritte">¶</a></h3>
+<h3 id="Preprocessing-Schritte"><a id="toc3d_"></a>Preprocessing-Schritte<a class="anchor-link" href="#Preprocessing-Schritte">¶</a></h3>
 </div>
 </div>
 </div>
@@ -7917,7 +7962,7 @@ truck     : 5000
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">loader_stats</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">cifar10_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -7971,7 +8016,7 @@ Berechnete std : [0.247023344039917, 0.24347808957099915, 0.2615787386894226]
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Standardwerte für CIFAR-10</span>
@@ -8020,7 +8065,7 @@ Berechnete std : [0.247023344039917, 0.24347808957099915, 0.2615787386894226]
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Aufteilung-in-Trainings-,-Validierungs--und-Testdaten">Aufteilung in Trainings-, Validierungs- und Testdaten<a class="anchor-link" href="#Aufteilung-in-Trainings-,-Validierungs--und-Testdaten">¶</a></h3>
+<h3 id="Aufteilung-in-Trainings-,-Validierungs--und-Testdaten"><a id="toc3e_"></a>Aufteilung in Trainings-, Validierungs- und Testdaten<a class="anchor-link" href="#Aufteilung-in-Trainings-,-Validierungs--und-Testdaten">¶</a></h3>
 </div>
 </div>
 </div>
@@ -8051,7 +8096,7 @@ Berechnete std : [0.247023344039917, 0.24347808957099915, 0.2615787386894226]
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Gesamtes Dataset laden</span>
@@ -8135,7 +8180,7 @@ Klassenverteilung je Split:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Labels extrahieren</span>
@@ -8203,7 +8248,7 @@ Klassenverteilung je Split:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Schritt-3:-Aufbau-des-Basismodells-und-Trainingsfunktionalit%C3%A4t">Schritt 3: Aufbau des Basismodells und Trainingsfunktionalität<a class="anchor-link" href="#Schritt-3:-Aufbau-des-Basismodells-und-Trainingsfunktionalit%C3%A4t">¶</a></h2>
+<h2 id="Schritt-3:-Aufbau-des-Basismodells-und-Trainingsfunktionalit%C3%A4t"><a id="toc4_"></a>Schritt 3: Aufbau des Basismodells und Trainingsfunktionalität<a class="anchor-link" href="#Schritt-3:-Aufbau-des-Basismodells-und-Trainingsfunktionalit%C3%A4t">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8223,7 +8268,7 @@ Klassenverteilung je Split:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
@@ -8253,7 +8298,7 @@ Klassenverteilung je Split:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Architektur-des-Basismodells">Architektur des Basismodells<a class="anchor-link" href="#Architektur-des-Basismodells">¶</a></h3>
+<h3 id="Architektur-des-Basismodells"><a id="toc4a_"></a>Architektur des Basismodells<a class="anchor-link" href="#Architektur-des-Basismodells">¶</a></h3>
 </div>
 </div>
 </div>
@@ -8346,7 +8391,7 @@ Klassenverteilung je Split:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Trainings--und-Evaluationsfunktionen">Trainings- und Evaluationsfunktionen<a class="anchor-link" href="#Trainings--und-Evaluationsfunktionen">¶</a></h3>
+<h3 id="Trainings--und-Evaluationsfunktionen"><a id="toc4b_"></a>Trainings- und Evaluationsfunktionen<a class="anchor-link" href="#Trainings--und-Evaluationsfunktionen">¶</a></h3>
 </div>
 </div>
 </div>
@@ -8380,7 +8425,7 @@ Klassenverteilung je Split:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_one_epoch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_to_wandb</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -8573,7 +8618,7 @@ Klassenverteilung je Split:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Sanity-Check:-Overfitting-auf-ein-Sample">Sanity Check: Overfitting auf ein Sample<a class="anchor-link" href="#Sanity-Check:-Overfitting-auf-ein-Sample">¶</a></h3><p>Vor dem eigentlichen Training wurde ein Sanity Check durchgeführt, bei dem versucht wurde, ein einzelnes Bild korrekt zu lernen. Dieser Test dient dazu sicherzustellen, dass der Lernprozess korrekt funktioniert (Forward/Backward + Optimizer + Loss).</p>
+<h3 id="Sanity-Check:-Overfitting-auf-ein-Sample"><a id="toc4c_"></a>Sanity Check: Overfitting auf ein Sample<a class="anchor-link" href="#Sanity-Check:-Overfitting-auf-ein-Sample">¶</a></h3><p>Vor dem eigentlichen Training wurde ein Sanity Check durchgeführt, bei dem versucht wurde, ein einzelnes Bild korrekt zu lernen. Dieser Test dient dazu sicherzustellen, dass der Lernprozess korrekt funktioniert (Forward/Backward + Optimizer + Loss).</p>
 </div>
 </div>
 </div>
@@ -8677,7 +8722,7 @@ Epoch 20: Loss=0.0000, Acc=100.0%
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Hyperparameter</span>
@@ -8837,7 +8882,7 @@ Ep 15: Tr L=0.3603, A=87.7% | Val L=0.9349, A=71.5%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="5-Fold-Cross-Validation">5-Fold Cross-Validation<a class="anchor-link" href="#5-Fold-Cross-Validation">¶</a></h3>
+<h3 id="5-Fold-Cross-Validation"><a id="toc4d_"></a>5-Fold Cross-Validation<a class="anchor-link" href="#5-Fold-Cross-Validation">¶</a></h3>
 </div>
 </div>
 </div>
@@ -9017,7 +9062,7 @@ Fold 5: Val Acc = 63.85%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Schritt-4:-Hyperparameter-Tuning">Schritt 4: Hyperparameter Tuning<a class="anchor-link" href="#Schritt-4:-Hyperparameter-Tuning">¶</a></h2><p>In diesem Schritt formulieren wir 10 Hypothesen aus den vorgegebenen Gruppen, führen Experimente durch und reflektieren die Ergebnisse.</p>
+<h2 id="Schritt-4:-Hyperparameter-Tuning"><a id="toc5_"></a>Schritt 4: Hyperparameter Tuning<a class="anchor-link" href="#Schritt-4:-Hyperparameter-Tuning">¶</a></h2><p>In diesem Schritt formulieren wir 10 Hypothesen aus den vorgegebenen Gruppen, führen Experimente durch und reflektieren die Ergebnisse.</p>
 </div>
 </div>
 </div>
@@ -9028,7 +9073,7 @@ Fold 5: Val Acc = 63.85%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-1-%E2%80%93-Reduzierte-Lernrate">Hypothese 1 – Reduzierte Lernrate<a class="anchor-link" href="#Hypothese-1-%E2%80%93-Reduzierte-Lernrate">¶</a></h3>
+<h3 id="Hypothese-1-%E2%80%93-Reduzierte-Lernrate"><a id="toc5a_"></a>Hypothese 1 – Reduzierte Lernrate<a class="anchor-link" href="#Hypothese-1-%E2%80%93-Reduzierte-Lernrate">¶</a></h3>
 </div>
 </div>
 </div>
@@ -9270,7 +9315,7 @@ Ep 60: Tr L=0.6640, A=77.5% | Val L=0.9393, A=68.2%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-2-%E2%80%93-Gewichtinitialisierung-mit-Xavier">Hypothese 2 – Gewichtinitialisierung mit Xavier<a class="anchor-link" href="#Hypothese-2-%E2%80%93-Gewichtinitialisierung-mit-Xavier">¶</a></h3>
+<h3 id="Hypothese-2-%E2%80%93-Xavier-Initialisierung"><a id="toc5b_"></a>Hypothese 2 – Xavier-Initialisierung<a class="anchor-link" href="#Hypothese-2-%E2%80%93-Xavier-Initialisierung">¶</a></h3>
 </div>
 </div>
 </div>
@@ -9482,7 +9527,7 @@ Ep 15: Tr L=0.3960, A=86.4% | Val L=0.9721, A=70.5%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-3-%E2%80%93-Erh%C3%B6hte-Modellkomplexit%C3%A4t-(zus%C3%A4tzlicher-Conv-Layer)">Hypothese 3 – Erhöhte Modellkomplexität (zusätzlicher Conv-Layer)<a class="anchor-link" href="#Hypothese-3-%E2%80%93-Erh%C3%B6hte-Modellkomplexit%C3%A4t-(zus%C3%A4tzlicher-Conv-Layer)">¶</a></h3>
+<h3 id="Hypothese-3-%E2%80%93-Erh%C3%B6hte-Modellkomplexit%C3%A4t"><a id="toc5c_"></a>Hypothese 3 – Erhöhte Modellkomplexität<a class="anchor-link" href="#Hypothese-3-%E2%80%93-Erh%C3%B6hte-Modellkomplexit%C3%A4t">¶</a></h3>
 </div>
 </div>
 </div>
@@ -9716,7 +9761,7 @@ Ep 20: Tr L=0.1830, A=93.9% | Val L=1.0489, A=73.0%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-4:-Mehr-Filter-verbessern-die-Performance">Hypothese 4: Mehr Filter verbessern die Performance<a class="anchor-link" href="#Hypothese-4:-Mehr-Filter-verbessern-die-Performance">¶</a></h3>
+<h3 id="Hypothese-4:-Mehr-Filter-verbessern-die-Performance"><a id="toc5d_"></a>Hypothese 4: Mehr Filter verbessern die Performance<a class="anchor-link" href="#Hypothese-4:-Mehr-Filter-verbessern-die-Performance">¶</a></h3>
 </div>
 </div>
 </div>
@@ -9943,7 +9988,7 @@ Ep 15: Tr L=0.1908, A=94.1% | Val L=1.0325, A=72.0%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-5:-Gr%C3%B6ssere-Convolution-Kernel-(5x5)">Hypothese 5: Grössere Convolution-Kernel (5x5)<a class="anchor-link" href="#Hypothese-5:-Gr%C3%B6ssere-Convolution-Kernel-(5x5)">¶</a></h3>
+<h3 id="Hypothese-5-%E2%80%93-Gr%C3%B6ssere-Kernel-(5%C3%975)"><a id="toc5e_"></a>Hypothese 5 – Grössere Kernel (5×5)<a class="anchor-link" href="#Hypothese-5-%E2%80%93-Gr%C3%B6ssere-Kernel-(5%C3%975)">¶</a></h3>
 </div>
 </div>
 </div>
@@ -10150,7 +10195,7 @@ Ep 15: Tr L=0.2558, A=91.5% | Val L=1.0019, A=71.3%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-6:-Verwendung-von-MaxPooling-vs.-Kein-Pooling">Hypothese 6: Verwendung von MaxPooling vs. Kein Pooling<a class="anchor-link" href="#Hypothese-6:-Verwendung-von-MaxPooling-vs.-Kein-Pooling">¶</a></h3>
+<h3 id="Hypothese-6-%E2%80%93-Kein-Pooling"><a id="toc5f_"></a>Hypothese 6 – Kein Pooling<a class="anchor-link" href="#Hypothese-6-%E2%80%93-Kein-Pooling">¶</a></h3>
 </div>
 </div>
 </div>
@@ -10161,8 +10206,9 @@ Ep 15: Tr L=0.2558, A=91.5% | Val L=1.0019, A=71.3%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Hypothese">Hypothese<a class="anchor-link" href="#Hypothese">¶</a></h4><p>Wenn auf das zweite Pooling-Layer verzichtet wird, erhöht sich die Modellkapazität, da mehr räumliche Information erhalten bleibt. Dies sollte sich positiv auf die Genauigkeit auswirken – insbesondere bei komplexeren Bildmerkmalen. Gleichzeitig steigt jedoch die Anzahl der Modellparameter stark an, was zu einem höheren Risiko von Overfitting führen kann.</p>
-<p>Pooling reduziert die räumliche Auflösung und damit auch die Komplexität der Repräsentation. Wird das zweite Pooling-Layer weggelassen, bleiben mehr Details erhalten, was eine feinere Klassifizierung begünstigen kann. Gleichzeitig führt dies zu einem deutlich grösseren vollvernetzten Layer, was mehr Rechenleistung und Regularisierung erfordert.</p>
+<h4 id="Hypothese">Hypothese<a class="anchor-link" href="#Hypothese">¶</a></h4><p>Wenn vollständig auf Pooling-Layer verzichtet wird, bleibt die räumliche Auflösung über alle Convolutional-Layer hinweg vollständig erhalten. Dadurch kann das Modell mehr feinkörnige Bildinformationen nutzen, was insbesondere bei der Unterscheidung feiner visueller Merkmale von Vorteil sein kann.</p>
+<p>Gleichzeitig führt das Weglassen von Pooling dazu, dass die Grösse der Feature Maps bis zur Flatten-Ebene sehr hoch bleibt. Dies resultiert in einem deutlich grösseren vollvernetzten Layer mit viel mehr Parametern, was die Modellkomplexität und das Risiko von Overfitting stark erhöht. Zudem steigt der Speicher- und Rechenbedarf.</p>
+<p>Pooling hat in klassischen CNNs die Aufgabe, wichtige Merkmale zu verdichten und die Modellgrösse zu reduzieren. Ohne diese Reduktion besteht zwar das Potenzial für präzisere Klassifikationen, jedoch nur unter der Bedingung, dass das Modell ausreichend regularisiert und mit genug Daten trainiert wird.</p>
 <p><em>Referenz:</em> <a href="https://cs231n.github.io/convolutional-networks/#pool">CS231n Convolutional Neural Networks for Visual Recognition – Stanford</a></p>
 </div>
 </div>
@@ -10174,7 +10220,7 @@ Ep 15: Tr L=0.2558, A=91.5% | Val L=1.0019, A=71.3%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Experiment">Experiment<a class="anchor-link" href="#Experiment">¶</a></h4><p>Architektur: NoPoolingCNN mit zwei Convolutional-Layern, jedoch nur einem MaxPooling-Layer nach der ersten Convolution.</p>
+<h4 id="Experiment">Experiment<a class="anchor-link" href="#Experiment">¶</a></h4><p>Architektur: NoPoolingCNN mit zwei Convolutional-Layern.</p>
 <ul>
 <li>Modellname: NoPoolingCNN</li>
 <li>W&amp;B Run: "no_pooling"</li>
@@ -10188,21 +10234,19 @@ Ep 15: Tr L=0.2558, A=91.5% | Val L=1.0019, A=71.3%
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NoPoolingCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span>  <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c1"># kein Pooling nach conv2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span>   <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span>   <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">*</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span>   <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
@@ -10217,7 +10261,7 @@ Ep 15: Tr L=0.2558, A=91.5% | Val L=1.0019, A=71.3%
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># W&amp;B Init für Hypothese 6</span>
@@ -10241,25 +10285,10 @@ Ep 15: Tr L=0.2558, A=91.5% | Val L=1.0019, A=71.3%
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<br/> <style><br>        .wandb-row {<br>            display: flex;<br>            flex-direction: row;<br>            flex-wrap: wrap;<br>            justify-content: flex-start;<br>            width: 100%;<br>        }<br>        .wandb-col {<br>            display: flex;<br>            flex-direction: column;<br>            flex-basis: 100%;<br>            flex: 1;<br>            padding: 10px;<br>        }<br>    </style><br/><div class="wandb-row"><div class="wandb-col"><h3>Run history:</h3><br><table class="wandb"><tr><td>epoch</td><td>▁▁▁▁▂▂▃▃▃▃▃▃▄▄▅▅▅▅▅▅▆▆▇▇▇▇▇▇██</td></tr><tr><td>num_parameters</td><td>▁</td></tr><tr><td>test_accuracy</td><td>▁</td></tr><tr><td>test_f1</td><td>▁</td></tr><tr><td>test_precision</td><td>▁</td></tr><tr><td>test_recall</td><td>▁</td></tr><tr><td>train_accuracy</td><td>▁▃▄▄▅▅▆▆▆▇▇▇▇██</td></tr><tr><td>train_loss</td><td>█▆▅▅▄▄▃▃▃▂▂▂▂▁▁</td></tr><tr><td>val_accuracy</td><td>▁▃▅▅▆▇▇▇▇██████</td></tr><tr><td>val_loss</td><td>█▆▄▄▂▂▁▁▁▁▁▁▃▂▃</td></tr></table><br/></br></div><div class="wandb-col"><h3>Run summary:</h3><br><table class="wandb"><tr><td>epoch</td><td>15</td></tr><tr><td>num_parameters</td><td>579402</td></tr><tr><td>test_accuracy</td><td>72.01</td></tr><tr><td>test_f1</td><td>0.72033</td></tr><tr><td>test_precision</td><td>0.7255</td></tr><tr><td>test_recall</td><td>0.7201</td></tr><tr><td>train_accuracy</td><td>91.5</td></tr><tr><td>train_loss</td><td>0.25576</td></tr><tr><td>val_accuracy</td><td>71.27</td></tr><tr><td>val_loss</td><td>1.00194</td></tr></table><br/></br></div></div>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
- View run <strong style="color:#cdcd00">kernel5</strong> at: <a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/n23dux2i" target="_blank">https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/n23dux2i</a><br/> View project at: <a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification" target="_blank">https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification</a><br/>Synced 5 W&amp;B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-Find logs at: <code>./wandb/run-20250611_181341-n23dux2i/logs</code>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre><span class="ansi-blue-intense-fg ansi-bold">wandb</span>: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+<span class="ansi-blue-intense-fg ansi-bold">wandb</span>: Currently logged in as: <span class="ansi-yellow-fg">oliver-pejic</span> (<span class="ansi-yellow-fg">oliver-pejic-fachhochschule-nordwestschweiz-fhnw</span>) to <span class="ansi-green-fg">https://api.wandb.ai</span>. Use <span class="ansi-bold">`wandb login --relogin`</span> to force relogin
+</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
@@ -10271,13 +10300,13 @@ Tracking run with wandb version 0.19.9
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-Run data is saved locally in <code>/teamspace/studios/this_studio/del_mc_25/wandb/run-20250611_181618-pbmdu5ht</code>
+Run data is saved locally in <code>/teamspace/studios/this_studio/del_mc_25/wandb/run-20250612_173554-oglu59c1</code>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-Syncing run <strong><a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/pbmdu5ht" target="_blank">no_pooling</a></strong> to <a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification" target="_blank">Weights &amp; Biases</a> (<a href="https://wandb.me/developer-guide" target="_blank">docs</a>)<br/>
+Syncing run <strong><a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/oglu59c1" target="_blank">no_pooling</a></strong> to <a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification" target="_blank">Weights &amp; Biases</a> (<a href="https://wandb.me/developer-guide" target="_blank">docs</a>)<br/>
 </div>
 </div>
 <div class="jp-OutputArea-child">
@@ -10289,13 +10318,13 @@ Syncing run <strong><a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwe
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
- View run at <a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/pbmdu5ht" target="_blank">https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/pbmdu5ht</a>
+ View run at <a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/oglu59c1" target="_blank">https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/oglu59c1</a>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<button onclick="this.nextSibling.style.display='block';this.style.display='none';">Display W&amp;B run</button><iframe src="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/pbmdu5ht?jupyter=true" style="border:none;width:100%;height:420px;display:none;"></iframe>
+<button onclick="this.nextSibling.style.display='block';this.style.display='none';">Display W&amp;B run</button><iframe src="https://wandb.ai/oliver-pejic-fachhochschule-nordwestschweiz-fhnw/image-classification/runs/oglu59c1?jupyter=true" style="border:none;width:100%;height:420px;display:none;"></iframe>
 </div>
 </div>
 </div>
@@ -10305,7 +10334,7 @@ Syncing run <strong><a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwe
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">no_pooling_model</span> <span class="o">=</span> <span class="n">NoPoolingCNN</span><span class="p">(</span><span class="n">num_classes</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -10335,21 +10364,21 @@ Syncing run <strong><a href="https://wandb.ai/oliver-pejic-fachhochschule-nordwe
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Ep 1: Tr L=1.6730, A=40.2% | Val L=1.4025, A=50.1%
-Ep 2: Tr L=1.2804, A=54.4% | Val L=1.1977, A=57.8%
-Ep 3: Tr L=1.1114, A=60.7% | Val L=1.0934, A=61.7%
-Ep 4: Tr L=0.9794, A=65.6% | Val L=1.0655, A=62.2%
-Ep 5: Tr L=0.8781, A=69.2% | Val L=0.9534, A=66.7%
-Ep 6: Tr L=0.7884, A=72.3% | Val L=0.9183, A=68.0%
-Ep 7: Tr L=0.7094, A=75.4% | Val L=0.8968, A=68.6%
-Ep 8: Tr L=0.6339, A=77.9% | Val L=0.8979, A=69.4%
-Ep 9: Tr L=0.5536, A=80.9% | Val L=0.8714, A=70.0%
-Ep 10: Tr L=0.4727, A=83.8% | Val L=0.8976, A=70.6%
-Ep 11: Tr L=0.3904, A=86.9% | Val L=0.9119, A=70.8%
-Ep 12: Tr L=0.3140, A=89.7% | Val L=0.9965, A=70.1%
-Ep 13: Tr L=0.2411, A=92.3% | Val L=1.0208, A=70.3%
-Ep 14: Tr L=0.1752, A=94.7% | Val L=1.1304, A=69.9%
-Ep 15: Tr L=0.1208, A=96.6% | Val L=1.1822, A=70.5%
+<pre>Ep 1: Tr L=1.6269, A=41.9% | Val L=1.3812, A=51.1%
+Ep 2: Tr L=1.2744, A=54.5% | Val L=1.2723, A=55.0%
+Ep 3: Tr L=1.1240, A=60.2% | Val L=1.1513, A=59.6%
+Ep 4: Tr L=0.9927, A=64.9% | Val L=1.0794, A=62.2%
+Ep 5: Tr L=0.8689, A=69.4% | Val L=1.0291, A=64.2%
+Ep 6: Tr L=0.7408, A=74.1% | Val L=1.0379, A=64.5%
+Ep 7: Tr L=0.6139, A=78.7% | Val L=1.0252, A=66.0%
+Ep 8: Tr L=0.4835, A=83.4% | Val L=1.1003, A=65.6%
+Ep 9: Tr L=0.3590, A=87.9% | Val L=1.1560, A=65.5%
+Ep 10: Tr L=0.2486, A=91.9% | Val L=1.3217, A=65.3%
+Ep 11: Tr L=0.1502, A=95.4% | Val L=1.4104, A=65.8%
+Ep 12: Tr L=0.0894, A=97.6% | Val L=1.6597, A=65.0%
+Ep 13: Tr L=0.0465, A=99.0% | Val L=1.7196, A=66.0%
+Ep 14: Tr L=0.0225, A=99.7% | Val L=1.8459, A=66.5%
+Ep 15: Tr L=0.0103, A=99.9% | Val L=1.9990, A=66.0%
 </pre>
 </div>
 </div>
@@ -10373,7 +10402,7 @@ Ep 15: Tr L=0.1208, A=96.6% | Val L=1.1822, A=70.5%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-7-%E2%80%93-Verwendung-von-Dropout">Hypothese 7 – Verwendung von Dropout<a class="anchor-link" href="#Hypothese-7-%E2%80%93-Verwendung-von-Dropout">¶</a></h3>
+<h3 id="Hypothese-7-%E2%80%93-Dropout"><a id="toc5g_"></a>Hypothese 7 – Dropout<a class="anchor-link" href="#Hypothese-7-%E2%80%93-Dropout">¶</a></h3>
 </div>
 </div>
 </div>
@@ -10614,7 +10643,7 @@ Ep 30: Tr L=0.3898, A=85.8% | Val L=0.8832, A=72.6%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-8-%E2%80%93-Verwendung-von-Data-Augmentation">Hypothese 8 – Verwendung von Data Augmentation<a class="anchor-link" href="#Hypothese-8-%E2%80%93-Verwendung-von-Data-Augmentation">¶</a></h3>
+<h3 id="Hypothese-8-%E2%80%93-Data-Augmentation"><a id="toc5h_"></a>Hypothese 8 – Data Augmentation<a class="anchor-link" href="#Hypothese-8-%E2%80%93-Data-Augmentation">¶</a></h3>
 </div>
 </div>
 </div>
@@ -10978,7 +11007,7 @@ Ep 60: Tr L=0.6887, A=75.8% | Val L=0.6409, A=77.8%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-9-%E2%80%93-Verwendung-von-Batch-Normalization">Hypothese 9 – Verwendung von Batch Normalization<a class="anchor-link" href="#Hypothese-9-%E2%80%93-Verwendung-von-Batch-Normalization">¶</a></h3>
+<h3 id="Hypothese-9-%E2%80%93-Batch-Normalization"><a id="toc5i_"></a>Hypothese 9 – Batch Normalization<a class="anchor-link" href="#Hypothese-9-%E2%80%93-Batch-Normalization">¶</a></h3>
 </div>
 </div>
 </div>
@@ -11207,7 +11236,7 @@ Ep 10: Tr L=0.4555, A=84.4% | Val L=0.8231, A=72.8%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Hypothese-10-%E2%80%93-Verwendung-des-Adam-Optimierers">Hypothese 10 – Verwendung des Adam-Optimierers<a class="anchor-link" href="#Hypothese-10-%E2%80%93-Verwendung-des-Adam-Optimierers">¶</a></h3>
+<h3 id="Hypothese-10-%E2%80%93-Adam-Optimizer"><a id="toc5j_"></a>Hypothese 10 – Adam-Optimizer<a class="anchor-link" href="#Hypothese-10-%E2%80%93-Adam-Optimizer">¶</a></h3>
 </div>
 </div>
 </div>
@@ -11399,7 +11428,7 @@ Ep 5: Tr L=0.5043, A=82.1% | Val L=0.8879, A=71.0%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Bestes-Modell-%E2%80%93-Kombination-erfolgreicher-Ans%C3%A4tze">Bestes Modell – Kombination erfolgreicher Ansätze<a class="anchor-link" href="#Bestes-Modell-%E2%80%93-Kombination-erfolgreicher-Ans%C3%A4tze">¶</a></h3><h4 id="Modellbeschreibung">Modellbeschreibung<a class="anchor-link" href="#Modellbeschreibung">¶</a></h4><p>Basierend auf den Erkenntnissen aus den zehn Hypothesen wurde ein finales Modell entworfen, das folgende leistungssteigernde Massnahmen kombiniert:
+<h3 id="Bestes-Modell-%E2%80%93-Kombination-erfolgreicher-Ans%C3%A4tze"><a id="toc5k_"></a>Bestes Modell – Kombination erfolgreicher Ansätze<a class="anchor-link" href="#Bestes-Modell-%E2%80%93-Kombination-erfolgreicher-Ans%C3%A4tze">¶</a></h3><h4 id="Modellbeschreibung">Modellbeschreibung<a class="anchor-link" href="#Modellbeschreibung">¶</a></h4><p>Basierend auf den Erkenntnissen aus den zehn Hypothesen wurde ein finales Modell entworfen, das folgende leistungssteigernde Massnahmen kombiniert:
 •	Tieferes Netzwerk (3 Convolutional Layer)
 •	Breitere Architektur (mehr Filter: 128 → 256 → 512)
 •	Grössere Convolution-Kernel (5×5 statt 3×3)
@@ -11641,7 +11670,7 @@ Ep 40: Tr L=0.4099, A=86.1% | Val L=0.4809, A=86.3%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Schritt-5:-Transfer-Learning-mit-ResNet18">Schritt 5: Transfer Learning mit ResNet18<a class="anchor-link" href="#Schritt-5:-Transfer-Learning-mit-ResNet18">¶</a></h2>
+<h2 id="Schritt-5:-Transfer-Learning-mit-ResNet18"><a id="toc6_"></a>Schritt 5: Transfer Learning mit ResNet18<a class="anchor-link" href="#Schritt-5:-Transfer-Learning-mit-ResNet18">¶</a></h2>
 </div>
 </div>
 </div>
@@ -11882,7 +11911,7 @@ Ep 15: Tr L=0.3578, A=87.4% | Val L=0.6991, A=77.7%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Insights-und-Reflexion">Insights und Reflexion<a class="anchor-link" href="#Insights-und-Reflexion">¶</a></h2>
+<h2 id="Erkenntnisse-und-Reflexion"><a id="toc7_"></a>Erkenntnisse und Reflexion<a class="anchor-link" href="#Erkenntnisse-und-Reflexion">¶</a></h2>
 </div>
 </div>
 </div>
@@ -11893,7 +11922,7 @@ Ep 15: Tr L=0.3578, A=87.4% | Val L=0.6991, A=77.7%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Modellvergleich-(nach-Accuracy-sortiert)">Modellvergleich (nach Accuracy sortiert)<a class="anchor-link" href="#Modellvergleich-(nach-Accuracy-sortiert)">¶</a></h3><table>
+<h3 id="Modellvergleich">Modellvergleich<a class="anchor-link" href="#Modellvergleich">¶</a></h3><table>
 <thead>
 <tr>
 <th>Modell</th>
@@ -11961,13 +11990,6 @@ Ep 15: Tr L=0.3578, A=87.4% | Val L=0.6991, A=77.7%
 <td>72.01 %</td>
 </tr>
 <tr>
-<td>No Pooling</td>
-<td>0.7161</td>
-<td>0.7141</td>
-<td>0.7141</td>
-<td>71.41 %</td>
-</tr>
-<tr>
 <td>Adam</td>
 <td>0.7183</td>
 <td>0.7139</td>
@@ -11995,6 +12017,13 @@ Ep 15: Tr L=0.3578, A=87.4% | Val L=0.6991, A=77.7%
 <td>0.7005</td>
 <td>70.16 %</td>
 </tr>
+<tr>
+<td>No Pooling</td>
+<td>0.6596</td>
+<td>0.6582</td>
+<td>0.6566</td>
+<td>65.82%</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -12020,16 +12049,16 @@ Ep 15: Tr L=0.3578, A=87.4% | Val L=0.6991, A=77.7%
 <td>11'181'642</td>
 </tr>
 <tr>
+<td>No Pooling</td>
+<td>8'409'418</td>
+</tr>
+<tr>
 <td>BestModel</td>
 <td>8'308'234</td>
 </tr>
 <tr>
 <td>Wider Model</td>
 <td>2'175'626</td>
-</tr>
-<tr>
-<td>No Pooling</td>
-<td>2'117'962</td>
 </tr>
 <tr>
 <td>Kernel (5x5)</td>
@@ -12085,7 +12114,7 @@ Ep 15: Tr L=0.3578, A=87.4% | Val L=0.6991, A=77.7%
 </ul>
 <h3 id="%C3%9Cberraschende-Ergebnisse">Überraschende Ergebnisse<a class="anchor-link" href="#%C3%9Cberraschende-Ergebnisse">¶</a></h3><ul>
 <li>BatchNorm und Data Augmentation schnitten ähnlich stark ab wie ResNet18 – obwohl die Modellarchitektur simpel blieb. Das zeigt, wie effektiv schon kleine architektonische oder datenbasierte Änderungen sein können.</li>
-<li>NoPooling erzielte fast dieselben Werte wie das Baseline-Modell – trotz deutlich höherer Parameteranzahl. Dies unterstreicht, dass Pooling-Layer nicht nur Rechenaufwand sparen, sondern offenbar auch beim Feature-Fokus helfen.</li>
+<li>NoPooling erzielte deutlich schlechtere Ergebnisse als das Baseline-Modell – trotz einer über 15-fach höheren Parameteranzahl. Dies zeigt, dass Pooling-Layer nicht nur Rechenaufwand reduzieren, sondern auch eine effektive Fokussierung auf relevante Merkmale ermöglichen. Ihr Verzicht führt zu einem ineffizienteren Modell, das zwar mehr lernen kann, aber schlechter generalisiert.</li>
 <li>Kernel (5x5) brachte nur marginale Verbesserungen gegenüber dem Baseline-Modell. Grössere Kernel können zwar theoretisch mehr Kontext erfassen, führen aber offenbar nicht automatisch zu besserer Generalisierung.</li>
 </ul>
 <h3 id="Entt%C3%A4uschende-oder-ineffektive-Methoden">Enttäuschende oder ineffektive Methoden<a class="anchor-link" href="#Entt%C3%A4uschende-oder-ineffektive-Methoden">¶</a></h3><ul>
