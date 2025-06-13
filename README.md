@@ -27,7 +27,7 @@ Das Notebook ist in mehrere strukturierte Abschnitte unterteilt:
 Insgesamt wurden **10 Hypothesen** formuliert und getestet:
 - Lernrate (reduziert)
 - Gewichtinitialisierung (Xavier)
-- Architekturmodifikation (tiefer, breiter, größere Kernel, ohne Pooling)
+- Architekturmodifikation (tiefer, breiter, grössere Kernel, ohne Pooling)
 - Regularisierung (Dropout, BatchNorm)
 - Optimierer (SGD vs. Adam)
 - Data Augmentation
@@ -56,8 +56,8 @@ Alle Modelle wurden systematisch verglichen hinsichtlich:
 | No Pooling     | 65.82%   | 8.4 Mio   |
 
 **Hauptinsights**:
-- Kombination erfolgreicher Maßnahmen (z. B. Dropout + BatchNorm + tiefer/breiter) ist effektiver als einzelne Änderungen
-- Data Augmentation brachte große Fortschritte ohne zusätzliche Parameter
+- Kombination erfolgreicher Massnahmen (z. B. Dropout + BatchNorm + tiefer/breiter) ist effektiver als einzelne Änderungen
+- Data Augmentation brachte grosse Fortschritte ohne zusätzliche Parameter
 - No Pooling führte zu schlechteren Ergebnissen. Auch die Parametergrösse stieg erheblich an.
 - Transfer Learning ist auch bei kleinen Datensätzen wie CIFAR-10 eine starke Alternative
 
