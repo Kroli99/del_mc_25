@@ -53,10 +53,12 @@ Alle Modelle wurden systematisch verglichen hinsichtlich:
 | Augmentation   | 77.69 %  | 545k      |
 | Deeper CNN     | 72.85 %  | 545k      |
 | BaselineCNN    | 71.76 %  | 545k      |
+| No Pooling     | 65.82%   | 8.4 Mio   |
 
 **Hauptinsights**:
 - Kombination erfolgreicher Maßnahmen (z. B. Dropout + BatchNorm + tiefer/breiter) ist effektiver als einzelne Änderungen
 - Data Augmentation brachte große Fortschritte ohne zusätzliche Parameter
+- No Pooling führte zu schlechteren Ergebnissen. Auch die Parametergrösse stieg erheblich an.
 - Transfer Learning ist auch bei kleinen Datensätzen wie CIFAR-10 eine starke Alternative
 
 ---
